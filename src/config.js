@@ -110,6 +110,29 @@ export const config = {
     hint: "Come back on the 30th 💗",
   },
 
+  // special dates: araw na may sariling kulay, confetti, at greeting
+  specialDates: [
+    {
+      id: "birthday",
+      month: 10, // <- birth month niya (1-12)
+      day: 30, // <- birth day niya
+      emoji: "",
+      label: "Happy Birthday, bibee! ",
+      title: "Happy Birthday, bibee! ",
+      text: "Happy happy birthday to my one and onlyyy bibeeee. Iloveeeyouuuuu so muchhh bibiii mwaamwaaamwaaaaaa. 💗",
+      bg: ["#2a0f2e", "#7a2a8a", "#ff8fc0"], // kulay ng langit (taas, gitna, baba)
+      confetti: ["🎂", "🎉", "💗", "✨"],
+      colors: ["#ff5c9d", "#ffe27a", "#b78cff"],
+    },
+  ],
+
+  // paru-paro / fireflies
+  critters: {
+    enabled: true,
+    kind: "auto", // "auto" = paru-paro sa araw, fireflies sa gabi | "butterfly" | "firefly"
+    count: 7,
+  },
+
   // Tulip colors (tip → middle → base). Repeats when it runs out.
   palettes: [
     { c1: "#ffc2d9", c2: "#ff5c9d", c3: "#b8135a" }, // pink
