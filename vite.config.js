@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icon-192.png", "icon-512.png"],
       manifest: {
-        name: "Para Sa Iyo",
-        short_name: "Para Sa Iyo",
+        name: "Libu-libong Buwan",
+        short_name: "Libu-libo",
         description: "May regalo ako sa iyo 💌",
         theme_color: "#2a0f2e",
         background_color: "#2a0f2e",
