@@ -21,7 +21,7 @@ export const config = {
   // mula sa umpisa, kaya dagdagan mo ito bago dumating ang 36th monthsary 💗
   // Palitan mo kahit ilan para mas maging "ikaw" ang tunog.
   messages: [
-    "ikaw talaga pinaka magandang nangyari sakin this year, no joke.",
+    "ikaw talaga ang pinaka magandang nangyari sakin from 2022 until now.",
     "sobrang saya ko dahil dumating ka at nakilala kita.",
     "mahal na mahal kitaa bebee, sobrang thankful ako sa lahat ng moments natin.",
     "pangakong dito lang ako para sayo, kahit anong mangyari.",
