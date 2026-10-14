@@ -92,6 +92,14 @@ export const config = {
     volume: 0.6,
     startAt: 123,
   },
+
+  // Song for the countdown screen
+  lockMusic: {
+    type: "youtube",
+    youtubeId: "bjhTxp06hOU", // ID lang, walang &list=...
+    volume: 0.6,
+    startAt: 2,
+  },
   couplePhoto: "/us.jpg",
 
   // Countdown lock: she can't open the gift until this date/time

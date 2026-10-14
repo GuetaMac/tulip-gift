@@ -25,10 +25,20 @@ const {
   start: startMusic,
   toggle: toggleMusic,
 } = createMusic(config.music);
+
+// separate song for the countdown screen
+const {
+  enabled: lockMusicEnabled,
+  blocked: lockMusicBlocked,
+  start: startLockMusic,
+  stop: stopLockMusic,
+  toggle: toggleLockMusic,
+} = createMusic(config.lockMusic);
+
 const started = ref(false);
-onMounted(() => initMusic());
 function openGift() {
   started.value = true;
+  stopLockMusic(); // countdown song fades out
   startMusic(); // runs inside the tap, so the browser allows sound
 }
 
@@ -51,6 +61,16 @@ const left = computed(() => {
     s: s % 60,
   };
 });
+// load the countdown song while locked, the main song once unlocked
+watch(
+  locked,
+  (isLocked) => {
+    if (isLocked)
+      startLockMusic(); // tries to play by itself
+    else initMusic();
+  },
+  { immediate: true },
+);
 const pad = (n) => String(n).padStart(2, "0");
 const lockBoxes = computed(() => [
   { label: "days", value: left.value.d },
@@ -466,6 +486,21 @@ const drifters = Array.from({ length: 16 }, (_, i) => ({
         <p class="mt-8 max-w-xs text-sm text-pink-100/80">
           {{ config.lock?.hint ?? "Come back when the timer hits zero 💗" }}
         </p>
+        <p
+          v-if="lockMusicEnabled && lockMusicBlocked"
+          class="mt-6 animate-pulse text-xs text-pink-200/80"
+        >
+          🎵 Tap anywhere to start the music
+        </p>
+        <button
+          v-if="lockMusicEnabled"
+          class="fixed right-3 grid size-10 place-items-center rounded-full border border-white/20 bg-white/10 text-lg backdrop-blur transition active:scale-90"
+          :style="{ top: 'max(0.75rem, env(safe-area-inset-top))' }"
+          :aria-label="muted ? 'Turn music on' : 'Turn music off'"
+          @click="toggleLockMusic"
+        >
+          {{ muted ? "🔇" : "🔊" }}
+        </button>
       </div>
     </Transition>
 
