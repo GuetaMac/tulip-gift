@@ -251,6 +251,18 @@ const drifters = Array.from({ length: 16 }, (_, i) => ({
       v-if="started"
       class="relative z-10 mx-auto flex min-h-dvh max-w-4xl flex-col items-center px-4 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]"
     >
+      <!-- our photo -->
+      <div
+        v-if="config.couplePhoto"
+        class="mb-3 rounded-full bg-linear-to-br from-pink-300 via-pink-500 to-purple-500 p-1 shadow-[0_0_35px_rgba(255,120,180,0.55)]"
+      >
+        <img
+          :src="config.couplePhoto"
+          alt="Us"
+          class="size-28 rounded-full border-2 border-white/80 object-cover sm:size-32"
+        />
+      </div>
+
       <p class="font-script text-2xl text-pink-200">for {{ config.herName }}</p>
       <h1
         class="mt-1 text-center font-display text-4xl leading-tight font-bold shimmer sm:text-5xl"

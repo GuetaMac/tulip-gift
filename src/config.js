@@ -92,6 +92,7 @@ export const config = {
     volume: 0.6,
     startAt: 123,
   },
+  couplePhoto: "/us.jpg",
 
   // Tulip colors (tip → middle → base). Repeats when it runs out.
   palettes: [
