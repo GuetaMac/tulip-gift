@@ -1,6 +1,6 @@
 export const config = {
   // ✏️ EDIT THESE
-  herName: "My Love",
+  herName: "Trixie",
   fromName: "Macky",
 
   // Ang araw na naging kayo (YYYY-MM-DD). Dito kinukuha ang bilang ng buwan.
