@@ -32,6 +32,38 @@ function openGift() {
   startMusic(); // runs inside the tap, so the browser allows sound
 }
 
+/* ---------- countdown lock (opens on config.unlockAt) ---------- */
+const unlockTime = config.unlockAt ? new Date(config.unlockAt).getTime() : 0;
+// secret preview so YOU can still open the app early: yoursite.app/?preview=KEY
+const previewOn =
+  !!config.previewKey &&
+  new URLSearchParams(window.location.search).get("preview") ===
+    config.previewKey;
+const now = ref(Date.now());
+const tick = now; // alias, used inside months below
+const locked = computed(() => !previewOn && unlockTime > now.value);
+const left = computed(() => {
+  const s = Math.max(0, Math.floor((unlockTime - now.value) / 1000));
+  return {
+    d: Math.floor(s / 86400),
+    h: Math.floor((s % 86400) / 3600),
+    m: Math.floor((s % 3600) / 60),
+    s: s % 60,
+  };
+});
+const pad = (n) => String(n).padStart(2, "0");
+const lockBoxes = computed(() => [
+  { label: "days", value: left.value.d },
+  { label: "hours", value: pad(left.value.h) },
+  { label: "min", value: pad(left.value.m) },
+  { label: "sec", value: pad(left.value.s) },
+]);
+let clock = null;
+onMounted(() => {
+  clock = setInterval(() => (now.value = Date.now()), 1000);
+});
+onBeforeUnmount(() => clearInterval(clock));
+
 /* ---------- 3D tilt (follows finger / mouse) ---------- */
 const rx = ref(0);
 const ry = ref(0);
@@ -55,7 +87,7 @@ const months = computed(() => {
   if (config.monthOverride) return config.monthOverride;
   const start = new Date(config.startDate + "T00:00:00");
   if (isNaN(start)) return 0;
-  const now = new Date();
+  const now = new Date(tick.value); // updates live, so the new tulip appears at midnight
   let m =
     (now.getFullYear() - start.getFullYear()) * 12 +
     (now.getMonth() - start.getMonth());
@@ -72,9 +104,34 @@ const months = computed(() => {
 const title = computed(() => {
   const n = months.value;
   if (n === 0) return "Happy Monthsary";
-  if (n % 12 === 0) return `Happy ${ordinal(n / 12)} Anniversary, bibee 💗`;
-  return `Happy ${ordinal(n)} Monthsary, bibee 💗`;
+  if (n % 12 === 0) return `Happy ${ordinal(n / 12)} Anniversary`;
+  return `Happy ${ordinal(n)} Monthsary`;
 });
+
+/* ---------- countdown to the next monthsary ---------- */
+const nextTarget = computed(() => {
+  const cur = new Date(now.value);
+  const at = (y, m) =>
+    new Date(y, m, Math.min(startDay, new Date(y, m + 1, 0).getDate()));
+  let t = at(cur.getFullYear(), cur.getMonth());
+  if (t <= cur) t = at(cur.getFullYear(), cur.getMonth() + 1);
+  return t.getTime();
+});
+const nextLeft = computed(() => {
+  const s = Math.max(0, Math.floor((nextTarget.value - now.value) / 1000));
+  return {
+    d: Math.floor(s / 86400),
+    h: Math.floor((s % 86400) / 3600),
+    m: Math.floor((s % 3600) / 60),
+    s: s % 60,
+  };
+});
+const nextDateLabel = computed(() =>
+  new Date(nextTarget.value).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  }),
+);
 
 /* ---------- tulips ----------
    Regular months: the newest months = big 3D tulips,
@@ -359,18 +416,63 @@ const drifters = Array.from({ length: 16 }, (_, i) => ({
         </button>
       </div>
 
-      <p class="mt-4 text-center text-sm text-pink-100/80">
-        🌱 Another flower is coming on the {{ ordinal(startDay) }}
-      </p>
+      <div class="mt-4 text-center">
+        <p class="text-sm text-pink-100/80">
+          🌱 Next tulip blooms on {{ nextDateLabel }}
+        </p>
+        <p
+          class="mt-1 font-display text-xl font-bold text-pink-100 tabular-nums"
+        >
+          {{ nextLeft.d }}d : {{ pad(nextLeft.h) }}h : {{ pad(nextLeft.m) }}m :
+          {{ pad(nextLeft.s) }}s
+        </p>
+      </div>
       <p class="mt-1 font-script text-xl text-pink-200">
         — {{ config.fromName }}
       </p>
     </main>
 
+    <!-- countdown lock: she can't get in until the date arrives -->
+    <Transition name="gate">
+      <div
+        v-if="locked"
+        class="fixed inset-0 z-[70] flex flex-col items-center justify-center px-6 text-center"
+      >
+        <div
+          class="animate-pulse text-7xl drop-shadow-[0_0_30px_rgba(255,120,180,0.6)]"
+        >
+          🌱
+        </div>
+        <p class="mt-6 font-script text-3xl text-pink-200">
+          for {{ config.herName }}
+        </p>
+        <h1 class="mt-2 font-display text-3xl font-bold">
+          {{ config.lock?.title ?? "Something is blooming..." }}
+        </h1>
+        <div class="mt-8 flex gap-3">
+          <div
+            v-for="b in lockBoxes"
+            :key="b.label"
+            class="w-16 rounded-2xl border border-white/20 bg-white/10 py-3 backdrop-blur"
+          >
+            <div class="font-display text-3xl font-bold tabular-nums">
+              {{ b.value }}
+            </div>
+            <div class="text-[10px] tracking-widest text-pink-200/80 uppercase">
+              {{ b.label }}
+            </div>
+          </div>
+        </div>
+        <p class="mt-8 max-w-xs text-sm text-pink-100/80">
+          {{ config.lock?.hint ?? "Come back when the timer hits zero 💗" }}
+        </p>
+      </div>
+    </Transition>
+
     <!-- intro: she taps once, the page opens and the song starts -->
     <Transition name="gate">
       <div
-        v-if="!started"
+        v-if="!started && !locked"
         class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-linear-to-b from-[#2a0f2e] via-[#6b1f4b] to-[#b8467a] px-6 text-center"
       >
         <div

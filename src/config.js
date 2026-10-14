@@ -94,6 +94,14 @@ export const config = {
   },
   couplePhoto: "/us.jpg",
 
+  // Countdown lock: she can't open the gift until this date/time
+  unlockAt: "2026-10-30T00:00:00", // oras ng phone niya (12:00 AM ng 30th)
+  previewKey: "macky123", // palitan mo, sikreto mo lang ito
+  lock: {
+    title: "Something is blooming...",
+    hint: "Come back on the 30th 💗",
+  },
+
   // Tulip colors (tip → middle → base). Repeats when it runs out.
   palettes: [
     { c1: "#ffc2d9", c2: "#ff5c9d", c3: "#b8135a" }, // pink
