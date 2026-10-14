@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme {
+  --font-script: "Dancing Script", cursive;
+  --font-display: "Playfair Display", Georgia, serif;
+}
+
+html,
+body {
+  margin: 0;
+  background: #2a0f2e;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Falling hearts / petals in the background */
+.drifter {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  90% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(40px, 112vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Message card transition */
+.pop-enter-active,
+.pop-leave-active {
+  transition: opacity 0.35s ease;
+}
+.pop-enter-active .card,
+.pop-leave-active .card {
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.35s ease;
+}
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
+}
+.pop-enter-from .card,
+.pop-leave-to .card {
+  transform: scale(0.8) translateY(20px);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drifter {
+    display: none;
+  }
+}
+
+/* ---------- extra magic ---------- */
+
+/* twinkling stars */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  animation: twinkle ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.05;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.25);
+  }
+}
+
+/* big soft colored glows drifting in the background */
+.aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: floaty 18s ease-in-out infinite alternate;
+}
+@keyframes floaty {
+  from {
+    transform: translate3d(-6%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8%, -6%, 0) scale(1.15);
+  }
+}
+
+/* shimmering title */
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    #fff 0%,
+    #ffd6e7 25%,
+    #fff 50%,
+    #ffc2dc 75%,
+    #fff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 7s linear infinite;
+  filter: drop-shadow(0 2px 12px rgba(255, 110, 170, 0.45));
+}
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* glowing glass message card */
+.card-glass {
+  box-shadow:
+    0 0 50px rgba(255, 120, 180, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star {
+    animation: none;
+    opacity: 0.5;
+  }
+  .aurora,
+  .shimmer {
+    animation: none;
+  }
+}
+
+/* intro gate fades away when she taps to open */
+.gate-leave-active {
+  transition:
+    opacity 1.1s ease,
+    transform 1.1s ease;
+}
+.gate-leave-to {
+  opacity: 0;
+  transform: scale(1.08);
+}
