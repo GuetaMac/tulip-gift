@@ -114,8 +114,8 @@ export const config = {
   specialDates: [
     {
       id: "birthday",
-      month: 10, // <- birth month niya (1-12)
-      day: 30, // <- birth day niya
+      month: 3, // <- birth month niya (1-12)
+      day: 11, // <- birth day niya
       emoji: "",
       label: "Happy Birthday, bibee! ",
       title: "Happy Birthday, bibee! ",
