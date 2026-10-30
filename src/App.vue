@@ -123,9 +123,9 @@ const months = computed(() => {
 
 const title = computed(() => {
   const n = months.value;
-  if (n === 0) return "Happy Monthsary";
-  if (n % 12 === 0) return `Happy ${ordinal(n / 12)} Anniversary`;
-  return `Happy ${ordinal(n)} Monthsary`;
+  if (n === 0) return "Happy Monthsary, bibee 💗";
+  if (n % 12 === 0) return `Happy ${ordinal(n / 12)} Anniversary, bibee 💗`;
+  return `Happy ${ordinal(n)} Monthsary, bibee 💗`;
 });
 
 /* ---------- countdown to the next monthsary ---------- */
